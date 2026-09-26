@@ -19,7 +19,15 @@
     "requires": {
       "API_BUSINESS_PARTNER": {
         "kind": "odata-v2",
-        "model": "srv/external/API_BUSINESS_PARTNER"
+        "model": "srv/external/API_BUSINESS_PARTNER",
+        "[development]": {
+          "credentials": {
+            "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_BUSINESS_PARTNER/",
+            "headers": {
+              "APIKey": "G7oX2FGZ1nHDAaRkrrG6045eCp47xY1L"
+            }
+          }
+        }
       }
     }
   }
