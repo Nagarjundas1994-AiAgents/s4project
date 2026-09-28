@@ -1,6 +1,9 @@
 using {API_BUSINESS_PARTNER as external} from './external/API_BUSINESS_PARTNER';
 
-service S4BusinessPartnerService @(path: '/s4bp') {
+@odata
+@mcp
+@mcp.instructions: 'Use describe to explore S/4 BusinessPartner data. Use query with CQL SELECT on BusinessPartners, BusinessPartnerAddresses, Suppliers, Customers. Prefer $top=20 paging. IMPORTANT: the query tool does NOT support GROUP BY, DISTINCT, or JOINs — for country breakdowns call the customerCountByCountry action instead of per-country filtered queries (the SAP sandbox rate-limits fan-out queries with HTTP 500).'
+service S4BusinessPartnerService {
 
   @readonly
   entity BusinessPartners as projection on external.A_BusinessPartner {
@@ -52,4 +55,14 @@ service S4BusinessPartnerService @(path: '/s4bp') {
         CreatedByUser,
         CreationDate
   };
+
+  /**
+   * Customers per country, aggregated server-side.
+   * Pages BusinessPartnerAddresses sequentially (sandbox-safe) and counts
+   * addresses whose BusinessPartner is a Customer. Returns compact JSON:
+   * `{ countries: [{ country, customers }], totalCustomers, scanned, truncated }`.
+   * Use this instead of GROUP BY (unsupported) or one query per country.
+   * @param top max countries returned, sorted descending (default 20, max 100)
+   */
+  action customerCountByCountry(top: Integer) returns String;
 }

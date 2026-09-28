@@ -1,6 +1,12 @@
 import cds from '@sap/cds'
+import DeepSeekChatModel from './deepseek-llm.js'
 
 export class CatalogService extends cds.ApplicationService { init() {
+
+  // Real LLM for the A2A ReAct loop (@cap-js/agents `buildModel`).
+  // Overrides the default `cds.connect.to('llm')` (which was llm-mock).
+  // FIFO semantics give this app handler priority over the default.
+  this.on('buildModel', async () => new DeepSeekChatModel('CatalogService', {}))
 
   const { Books } = cds.entities('sap.capire.bookshop')
   const { ListOfBooks } = this.entities

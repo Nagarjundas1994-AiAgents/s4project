@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "@sap/cds": "^10",
+    "@cap-js/agents": "^0.9.7",
+    "@cap-js/ai": "^1.2.0",
+    "@cap-js/mcp": "^1.5.0",
+    "@langchain/openai": "^1.6.0",
     "@sap-cloud-sdk/connectivity": "^4",
     "@sap-cloud-sdk/http-client": "^4",
-    "@sap-cloud-sdk/resilience": "^4"
+    "@sap-cloud-sdk/resilience": "^4",
+    "@sap/cds": "^10"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^3"
@@ -16,7 +20,59 @@
   },
   "private": true,
   "cds": {
+    "agents": {
+      "quotas": false
+    },
+    "mcp": {
+      "per_action_tool": true,
+      "prefix": true,
+      "format": "cql"
+    },
     "requires": {
+      "auth": {
+        "users": {
+          "nagar": {
+            "password": "secret",
+            "roles": [
+              "admin"
+            ]
+          }
+        }
+      },
+      "llm": {
+        "kind": "deepseek",
+        "model": "deepseek-flash",
+        "credentials": {
+          "url": "https://api.deepseek.com",
+          "model": "deepseek-flash"
+        }
+      },
+      "deepseek": {
+        "credentials": {
+          "url": "https://api.deepseek.com",
+          "model": "deepseek-flash"
+        }
+      },
+      "[hybrid]": {
+        "llm": {
+          "kind": "aicore",
+          "model": "gpt-4o"
+        }
+      },
+      "[production]": {
+        "llm": {
+          "kind": "aicore",
+          "model": "gpt-4o"
+        }
+      },
+      "kinds": {
+        "deepseek": {
+          "impl": "../../../../../srv/deepseek-llm.js"
+        },
+        "sqlite": {
+          "impl": "@cap-js/sqlite"
+        }
+      },
       "API_BUSINESS_PARTNER": {
         "kind": "odata-v2",
         "model": "srv/external/API_BUSINESS_PARTNER",

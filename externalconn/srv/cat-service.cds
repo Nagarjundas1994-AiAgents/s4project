@@ -1,5 +1,8 @@
 using {sap.capire.bookshop as my} from '../db/schema';
 
+@odata
+@mcp
+@mcp.instructions: 'Use describe to explore Books catalog. Use query with CQL SELECT on Books, ListOfBooks.'
 service CatalogService {
 
   /** For displaying lists of Books */
@@ -26,7 +29,7 @@ service CatalogService {
       modifiedBy
     };
 
-  @requires: 'authenticated-user'
+  //@requires: 'authenticated-user'
   action submitOrder(book: Books:ID, quantity: Integer) returns {
     stock : Integer
   };
